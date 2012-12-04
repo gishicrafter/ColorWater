@@ -43,7 +43,7 @@ public class TextureWaterLikeFX extends FMLTextureFX
 
 	public TextureWaterLikeFX(int textureIndex, String tex, int r1, int r2, int g1, int g2, int b1, int b2)
 	{
-		this(textureIndex, tex, r1, r2, g1, g2, b1, b2, 146, 196-146);
+		this(textureIndex, tex, r1, r2, g1, g2, b1, b2, 146, 196);
 	}
 	
 	public TextureWaterLikeFX(int textureIndex, String texture, int colorBase, int colorSpecular)
@@ -52,6 +52,17 @@ public class TextureWaterLikeFX extends FMLTextureFX
 				(colorBase >> 16) & 0xFF, (colorSpecular >> 16) & 0xFF,
 				(colorBase >> 8) & 0xFF, (colorSpecular >> 8) & 0xFF,
 				colorBase & 0xFF, colorSpecular & 0xFF);
+	}
+	
+	public TextureWaterLikeFX setMaxColorDistance(float distance)
+	{
+		float oldDistance = (float) Math.sqrt(redShift*redShift + greenShift*greenShift + blueShift*blueShift);
+		if(oldDistance > distance){
+			redShift = (int)(redShift*distance/oldDistance);
+			greenShift = (int)(greenShift*distance/oldDistance);
+			blueShift = (int)(blueShift*distance/oldDistance);
+		}
+		return this;
 	}
 
 	@Override

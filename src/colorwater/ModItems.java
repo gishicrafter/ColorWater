@@ -1,10 +1,13 @@
 package colorwater;
 
 import buildcraft.api.fuels.IronEngineFuel;
+import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
+import net.minecraft.src.Block;
 import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
+import net.minecraft.src.Material;
 import net.minecraftforge.liquids.LiquidContainerData;
 import net.minecraftforge.liquids.LiquidContainerRegistry;
 import net.minecraftforge.liquids.LiquidDictionary;
@@ -13,14 +16,34 @@ import net.minecraftforge.liquids.LiquidStack;
 
 public class ModItems
 {
+	public static BlockGeneric blockGel;
+	public static SubBlockInfo[] blockGelSub = new SubBlockInfo[16];
+	
 	public static ItemGeneric bucketGeneric;
 	public static ItemGeneric liquidGeneric;
+	public static ItemGeneric bucketGel;
+	public static ItemGeneric itemGel;
 
 	public static SubItemInfo[] bucketSub = new SubItemInfo[32];
 	public static SubItemInfo[] liquidSub = new SubItemInfo[32];
+	public static SubItemInfo[] bucketGelSub = new SubItemInfo[16];
+	public static SubItemInfo[] itemGelSub = new SubItemInfo[16];
 	
 	public static void registerItems()
 	{
+		if(ModConfiguration.idBlockGel > 0){
+			(blockGel = new BlockGel(ModConfiguration.idBlockGel, 16, Material.water))
+				.setHardness(0.15F)
+				.setResistance(5.0F)
+				.setStepSound(Block.soundSandFootstep)
+				.setLightOpacity(3)
+				.setBlockName("colorwater.gel")
+				.setTextureFile(CommonProxy.BLOCKS_PNG);
+			
+			LanguageRegistry.addName(blockGel, "Generic Gel");
+			GameRegistry.registerBlock(blockGel, ItemBlockGeneric.class);
+		}
+		
 		(bucketGeneric = new ItemGeneric(ModConfiguration.idBucketGeneric))
 			.setMaxStackSize(1)
 			.setIconCoord(0, 1)
@@ -38,6 +61,25 @@ public class ModItems
 			.setTextureFile(CommonProxy.ITEMS_PNG);
 		
 		LanguageRegistry.addName(liquidGeneric, "Color Liquid");
+		
+		(bucketGel = new ItemGenericUseable(ModConfiguration.idBucketGel))
+			.setMaxStackSize(1)
+			.setIconCoord(0, 1)
+			.setContainerItem(Item.bucketEmpty)
+			.setCreativeTab(CreativeTabs.tabMisc)
+			.setItemName("colorwater.bucket.gel")
+			.setTextureFile(CommonProxy.ITEMS_PNG);
+		
+		LanguageRegistry.addName(bucketGel, "Color Gel Bucket");
+		
+		(itemGel = new ItemGeneric(ModConfiguration.idItemGel))
+			.setMaxStackSize(64)
+			.setIconCoord(8, 1)
+			.setCreativeTab(CreativeTabs.tabMaterials)
+			.setItemName("colorwater.gel")
+			.setTextureFile(CommonProxy.ITEMS_PNG);
+		
+		LanguageRegistry.addName(itemGel, "Color Gel Bucket");
 		
 		int[] fuelBurning = {60000, 60000, 60000, 60000, 120000, 120000, 120000, 120000, 300000, 300000, 300000, 300000, 600000, 600000, 600000, 600000};
 		float[] fuelPower = new float[16];
@@ -108,6 +150,53 @@ public class ModItems
 							LiquidDictionary.getLiquid("oil" + color.name(), LiquidContainerRegistry.BUCKET_VOLUME),
 							fuelPower[i],
 							fuelBurning[i]));
+			
+			itemGelSub[i] = new SubItemInfo(itemGel, i)
+				.setIconColor(color.colorcode)
+				.setIconCoord(8, 1)
+				.setSecondaryIconColor(0xF0FFF0)
+				.setSecondaryIconCoord(9, 1)
+				.setName(color.colorName());
+			
+			LanguageRegistry.addName(itemGelSub[i].getItemStack(1), color.name() + " Gel");
+			
+			if(ModConfiguration.idBlockGel > 0){
+				blockGelSub[i] = new SubBlockInfo(blockGel, i)
+				.setBlockColor(0xFFFFFF)
+				.setTextureIndex(16+i)
+				.setDropItem(itemGelSub[i].parentID, 4, itemGelSub[i].meta)
+				.setName(color.colorName());
+				
+				LanguageRegistry.addName(blockGelSub[i].getItemStack(1), color.name() + "Gel");
+			}
+			
+			bucketGelSub[i] = new SubItemInfo(bucketGel, i)
+				.setIconColor(0xFFFFFF)
+				.setIconCoord(0, 1)
+				.setSecondaryIconColor(color.colorcode)
+				.setSecondaryIconCoord(1, 1)
+				.setName(color.colorName());
+
+			((ItemGenericUseable)bucketGel).useItemHandlerList.put(i,
+					new UseGelBucketHandler(
+							bucketGelSub[i],
+							ModConfiguration.idBlockGel,
+							i));
+			
+			LanguageRegistry.addName(bucketGelSub[i].getItemStack(1), color.name() + " Gel Bucket");
+			
+			LiquidContainerRegistry.registerLiquid(
+					new LiquidContainerData(
+							LiquidDictionary.getOrCreateLiquid(
+									"gel" + color.name(),
+									new LiquidStack(
+											ModConfiguration.idBlockGel,
+											LiquidContainerRegistry.BUCKET_VOLUME,
+											i
+											)
+									),
+							bucketGelSub[i].getItemStack(1),
+							LiquidContainerRegistry.EMPTY_BUCKET));
 		}
 	}
 }

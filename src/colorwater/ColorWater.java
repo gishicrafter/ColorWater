@@ -2,6 +2,7 @@ package colorwater;
 
 import buildcraft.api.recipes.RefineryRecipe;
 import net.minecraft.src.Item;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.liquids.LiquidDictionary;
 import net.minecraftforge.liquids.LiquidStack;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
@@ -36,6 +37,7 @@ public class ColorWater {
 	public void load(FMLInitializationEvent event) {
 		ModItems.registerItems();
 		proxy.registerRenderers();
+		MinecraftForge.EVENT_BUS.register(new ForgeEventHandler());
 	}
 	
 	@PostInit
@@ -50,6 +52,16 @@ public class ColorWater {
 		int i;
 		for(i = 0; i < 16; ++i){
 			GameRegistry.addRecipe(new ShapelessOreRecipe(ModItems.bucketSub[i].getItemStack(1) ,new Object[]{"dye" + Color.values()[i].name(), Item.bucketEmpty, Item.bucketWater}));
+			if(ModItems.blockGel != null){
+				if(ExternalItems.fuel != null){
+					GameRegistry.addShapelessRecipe(ModItems.blockGelSub[i].getItemStack(1), new Object[]{ModItems.bucketSub[16+i].getItemStack(1), Item.slimeBall, Item.slimeBall, Item.slimeBall, Item.slimeBall});
+				}else{
+					GameRegistry.addShapelessRecipe(ModItems.blockGelSub[i].getItemStack(1), new Object[]{ModItems.bucketSub[i].getItemStack(1), Item.slimeBall, Item.slimeBall, Item.slimeBall, Item.slimeBall});
+				}
+				GameRegistry.addShapelessRecipe(ModItems.bucketGelSub[i].getItemStack(1), new Object[]{ModItems.blockGelSub[i].getItemStack(1), Item.bucketEmpty});
+				GameRegistry.addShapelessRecipe(ModItems.blockGelSub[i].getItemStack(1), new Object[]{ModItems.bucketGelSub[i].getItemStack(1)});
+				GameRegistry.addRecipe(ModItems.blockGelSub[i].getItemStack(1), new Object[]{"bb", "bb", Character.valueOf('b'), ModItems.itemGelSub[i].getItemStack(1)});
+			}
 		}
 	}
 	
@@ -75,6 +87,15 @@ public class ColorWater {
 								LiquidDictionary.getLiquid("oil" + Color.mixing[i][0].name(), 1),
 								LiquidDictionary.getLiquid("oil" + Color.mixing[i][1].name(), 1),
 								LiquidDictionary.getLiquid("oil" + Color.values()[i].name(), 2),
+								1, 1
+								)
+						);
+				
+				RefineryRecipe.registerRefineryRecipe(
+						new RefineryRecipe(
+								LiquidDictionary.getLiquid("gel" + Color.mixing[i][0].name(), 1),
+								LiquidDictionary.getLiquid("gel" + Color.mixing[i][1].name(), 1),
+								LiquidDictionary.getLiquid("gel" + Color.values()[i].name(), 2),
 								1, 1
 								)
 						);
