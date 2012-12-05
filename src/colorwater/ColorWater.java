@@ -173,8 +173,13 @@ public class ColorWater {
 		}
 		for(i = 0; i < 16; ++i){
 			if(ModItems.blockGel != null){
-				ItemStack itemDyeGel = ModItems.bucketSub[itemDyeGelBaseIndex+i].getItemStack(1);
-				GameRegistry.addShapelessRecipe(ModItems.blockGelSub[i].getItemStack(1), new Object[]{itemDyeGel, slimeBall, slimeBall, slimeBall, slimeBall});
+				GameRegistry.addShapelessRecipe(
+						ModItems.blockGelSub[i].getItemStack(1),
+						new Object[]{
+							ModItems.bucketSub[itemDyeGelBaseIndex+i].getItemStack(1),
+							slimeBall, slimeBall, slimeBall, slimeBall
+							}
+						);
 			}
 		}
 	}
@@ -189,7 +194,12 @@ public class ColorWater {
 		
 		int i;
 		for(i = 0; i < 16; ++i){
-			squeezerManager.addRecipe(5, new ItemStack[]{ModItems.itemGelSub[i].getItemStack(1)}, new LiquidStack(ModItems.blockGelSub[i].parentID, LiquidContainerRegistry.BUCKET_VOLUME/4, ModItems.blockGelSub[i].meta));
+			if(ModItems.blockGel != null){
+				squeezerManager.addRecipe(
+						5,
+						new ItemStack[]{ModItems.itemGelSub[i].getItemStack(1)},
+						new LiquidStack(ModItems.blockGelSub[i].parentID, LiquidContainerRegistry.BUCKET_VOLUME/4, ModItems.blockGelSub[i].meta));
+			}
 		}
 	}
 }
