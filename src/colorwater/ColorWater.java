@@ -1,7 +1,9 @@
 package colorwater;
 
 import buildcraft.api.recipes.RefineryRecipe;
+import net.minecraft.src.Block;
 import net.minecraft.src.Item;
+import net.minecraft.src.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.liquids.LiquidDictionary;
 import net.minecraftforge.liquids.LiquidStack;
@@ -17,6 +19,8 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.registry.GameRegistry;
+import forestry.api.recipes.ICarpenterManager;
+import forestry.api.recipes.RecipeManagers;
 
 @Mod(name="ColorWater", version="0.0.0", modid = "ColorWater")
 @NetworkMod(clientSideRequired=true, serverSideRequired=false)
@@ -45,19 +49,15 @@ public class ColorWater {
 		ExternalItems.registerExternalItems();
 		registerCraftingRecipe();
 		registerRefineryRecipe();
+		registerCarpenterRecipe();
 	}
-	
+
 	private void registerCraftingRecipe()
 	{
 		int i;
 		for(i = 0; i < 16; ++i){
 			GameRegistry.addRecipe(new ShapelessOreRecipe(ModItems.bucketSub[i].getItemStack(1) ,new Object[]{"dye" + Color.values()[i].name(), Item.bucketEmpty, Item.bucketWater}));
 			if(ModItems.blockGel != null){
-				if(ExternalItems.fuel != null){
-					GameRegistry.addShapelessRecipe(ModItems.blockGelSub[i].getItemStack(1), new Object[]{ModItems.bucketSub[16+i].getItemStack(1), Item.slimeBall, Item.slimeBall, Item.slimeBall, Item.slimeBall});
-				}else{
-					GameRegistry.addShapelessRecipe(ModItems.blockGelSub[i].getItemStack(1), new Object[]{ModItems.bucketSub[i].getItemStack(1), Item.slimeBall, Item.slimeBall, Item.slimeBall, Item.slimeBall});
-				}
 				GameRegistry.addShapelessRecipe(ModItems.bucketGelSub[i].getItemStack(1), new Object[]{ModItems.blockGelSub[i].getItemStack(1), Item.bucketEmpty});
 				GameRegistry.addShapelessRecipe(ModItems.blockGelSub[i].getItemStack(1), new Object[]{ModItems.bucketGelSub[i].getItemStack(1)});
 				GameRegistry.addRecipe(ModItems.blockGelSub[i].getItemStack(1), new Object[]{"bb", "bb", Character.valueOf('b'), ModItems.itemGelSub[i].getItemStack(1)});
@@ -110,6 +110,68 @@ public class ColorWater {
 								1, 1
 								)
 						);
+			}
+		}
+	}
+	
+	private void registerCarpenterRecipe() {
+		ICarpenterManager carpenterManager = RecipeManagers.carpenterManager;
+		if(carpenterManager == null){
+			registerCarpenterAlternativeRecipe();
+			return;
+		}
+		
+		int i;
+		ItemStack wool = new ItemStack(Block.cloth, 1, -1);
+		ItemStack string = new ItemStack(Item.silk, 1, -1);
+		ItemStack slimeBall = new ItemStack(Item.slimeBall, 1, -1);
+		String liquidDyeGelBase;
+		if(ExternalItems.fuel != null){
+			liquidDyeGelBase = "oil";
+		}else{
+			liquidDyeGelBase = "water";
+		}
+		for(i = 0; i < 16; ++ i){
+			Color color = Color.values()[i];
+			carpenterManager.addRecipe(
+					5,
+					LiquidDictionary.getLiquid("water"+color.name(), 250),
+					null,
+					new ItemStack(Block.cloth, 1, i),
+					new Object[]{"w",Character.valueOf('w'),wool});
+			
+			carpenterManager.addRecipe(
+					5,
+					LiquidDictionary.getLiquid("water"+color.name(), 250),
+					null,
+					new ItemStack(Block.cloth, 1, i),
+					new Object[]{"ss", "ss", Character.valueOf('s'), string});
+			
+			if(ModItems.blockGel != null){
+				carpenterManager.addRecipe(
+						5,
+						LiquidDictionary.getLiquid(liquidDyeGelBase+color.name(), 500),
+						null,
+						ModItems.blockGelSub[i].getItemStack(1),
+						new Object[]{"ss", "ss", Character.valueOf('s'), slimeBall});
+			}
+		}
+	}
+	
+	private void registerCarpenterAlternativeRecipe()
+	{
+		int i;
+		ItemStack slimeBall = new ItemStack(Item.slimeBall, 1, -1);
+		int itemDyeGelBaseIndex;
+		if(ExternalItems.fuel != null){
+			itemDyeGelBaseIndex = 16;
+		}else{
+			itemDyeGelBaseIndex = 0;
+		}
+		for(i = 0; i < 16; ++i){
+			if(ModItems.blockGel != null){
+				ItemStack itemDyeGel = ModItems.bucketSub[itemDyeGelBaseIndex+i].getItemStack(1);
+				GameRegistry.addShapelessRecipe(ModItems.blockGelSub[i].getItemStack(1), new Object[]{itemDyeGel, slimeBall, slimeBall, slimeBall, slimeBall});
 			}
 		}
 	}

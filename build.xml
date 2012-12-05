@@ -4,7 +4,8 @@
 	<property file="build.properties" />
 	
 	<target name="clean">
-        <delete dir="${dir.mcp}\src\common\buildcraft" />
+		<delete dir="${dir.mcp}\src\common\buildcraft" />
+		<delete dir="${dir.mcp}\src\common\forestry" />
 		<delete dir="${dir.mcp}\src\common\colorwater" />
 		<delete dir="${dir.mcp}\reobf\minecraft" />
 	</target>
@@ -15,6 +16,11 @@
 		
 		<mkdir dir="${dir.mcp}\src\common\buildcraft\api\fuels" />
 		<copy todir="${dir.mcp}\src\common\buildcraft\api\fuels" file="${dir.mcp}\api\buildcraft\api\fuels\IronEngineFuel.java" />
+		
+		<mkdir dir="${dir.mcp}\src\common\forestry\api" />
+		<copy todir="${dir.mcp}\src\common\forestry\api">
+			<fileset dir="${dir.mcp}\api\forestry\api\recipes\" />
+		</copy>
 		
 		<copy todir="${dir.mcp}\src\common">
 			<fileset dir="${dir.src}" />
