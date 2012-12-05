@@ -5,6 +5,7 @@ import net.minecraft.src.Block;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.liquids.LiquidContainerRegistry;
 import net.minecraftforge.liquids.LiquidDictionary;
 import net.minecraftforge.liquids.LiquidStack;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
@@ -20,6 +21,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.registry.GameRegistry;
 import forestry.api.recipes.ICarpenterManager;
+import forestry.api.recipes.ISqueezerManager;
 import forestry.api.recipes.RecipeManagers;
 
 @Mod(name="ColorWater", version="0.0.0", modid = "ColorWater")
@@ -50,6 +52,7 @@ public class ColorWater {
 		registerCraftingRecipe();
 		registerRefineryRecipe();
 		registerCarpenterRecipe();
+		registerSqueezerRecipe();
 	}
 
 	private void registerCraftingRecipe()
@@ -135,14 +138,14 @@ public class ColorWater {
 			Color color = Color.values()[i];
 			carpenterManager.addRecipe(
 					5,
-					LiquidDictionary.getLiquid("water"+color.name(), 250),
+					LiquidDictionary.getLiquid("water"+color.name(), LiquidContainerRegistry.BUCKET_VOLUME/4),
 					null,
 					new ItemStack(Block.cloth, 1, i),
 					new Object[]{"w",Character.valueOf('w'),wool});
 			
 			carpenterManager.addRecipe(
 					5,
-					LiquidDictionary.getLiquid("water"+color.name(), 250),
+					LiquidDictionary.getLiquid("water"+color.name(), LiquidContainerRegistry.BUCKET_VOLUME/4),
 					null,
 					new ItemStack(Block.cloth, 1, i),
 					new Object[]{"ss", "ss", Character.valueOf('s'), string});
@@ -150,7 +153,7 @@ public class ColorWater {
 			if(ModItems.blockGel != null){
 				carpenterManager.addRecipe(
 						5,
-						LiquidDictionary.getLiquid(liquidDyeGelBase+color.name(), 500),
+						LiquidDictionary.getLiquid(liquidDyeGelBase+color.name(), LiquidContainerRegistry.BUCKET_VOLUME/2),
 						null,
 						ModItems.blockGelSub[i].getItemStack(1),
 						new Object[]{"ss", "ss", Character.valueOf('s'), slimeBall});
@@ -173,6 +176,20 @@ public class ColorWater {
 				ItemStack itemDyeGel = ModItems.bucketSub[itemDyeGelBaseIndex+i].getItemStack(1);
 				GameRegistry.addShapelessRecipe(ModItems.blockGelSub[i].getItemStack(1), new Object[]{itemDyeGel, slimeBall, slimeBall, slimeBall, slimeBall});
 			}
+		}
+	}
+	
+	public void registerSqueezerRecipe()
+	{
+		ISqueezerManager squeezerManager = RecipeManagers.squeezerManager;
+		
+		if(squeezerManager == null){
+			return;
+		}
+		
+		int i;
+		for(i = 0; i < 16; ++i){
+			squeezerManager.addRecipe(5, new ItemStack[]{ModItems.itemGelSub[i].getItemStack(1)}, new LiquidStack(ModItems.blockGelSub[i].parentID, LiquidContainerRegistry.BUCKET_VOLUME/4, ModItems.blockGelSub[i].meta));
 		}
 	}
 }
