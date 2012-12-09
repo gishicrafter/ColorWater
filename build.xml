@@ -6,11 +6,12 @@
 	<target name="clean">
 		<delete dir="${dir.mcp}\src\common\buildcraft" />
 		<delete dir="${dir.mcp}\src\common\forestry" />
+		<delete dir="${dir.mcp}\src\common\gishicrafter" />
 		<delete dir="${dir.mcp}\src\common\colorwater" />
 		<delete dir="${dir.mcp}\reobf\minecraft" />
 	</target>
 	
-	<target name="build">
+	<target name="build" depends="clean">
 		<mkdir dir="${dir.mcp}\src\common\buildcraft\api\recipes"/>
 		<copy todir="${dir.mcp}\src\common\buildcraft\api\recipes" file="${dir.mcp}\api\buildcraft\api\recipes\RefineryRecipe.java" />
 		
@@ -22,12 +23,15 @@
 			<fileset dir="${dir.mcp}\api\forestry\api\recipes\" />
 		</copy>
 		
+		<mkdir dir="${dir.mcp}\src\common\gishicrafter\util" />
+		<copy todir="${dir.mcp}\src\common\gishicrafter\util" file="${dir.mcp}\api\gishicrafter\util\ConfigHelper.java" failonerror="false" />
+		
 		<copy todir="${dir.mcp}\src\common">
 			<fileset dir="${dir.src}" />
 		</copy>
 	</target>
 	
-	<target name="recompile">
+	<target name="recompile" depends="build">
 		<exec dir="${dir.mcp}" executable="cmd" osfamily="windows">
 			<arg line="/c recompile.bat" />
 		</exec>
@@ -36,7 +40,7 @@
 		</exec>
 	</target>
 	
-	<target name="reobfuscate">
+	<target name="reobfuscate" depends="recompile">
 		<exec dir="${dir.mcp}" executable="cmd" osfamily="windows">
 			<arg line="/c reobfuscate.bat" />
 		</exec>
@@ -45,11 +49,7 @@
 		</exec>
 	</target>
 	
-	<target name="release">
-		<antcall target="clean" />
-		<antcall target="build" />
-		<antcall target="recompile" />		
-		<antcall target="reobfuscate" />
+	<target name="release" depends="reobfuscate">
 		
 		<mkdir dir="${dir.release}" />
 		<buildnumber />
