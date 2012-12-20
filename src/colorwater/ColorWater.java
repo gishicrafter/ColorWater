@@ -1,9 +1,9 @@
 package colorwater;
 
 import buildcraft.api.recipes.RefineryRecipe;
-import net.minecraft.src.Block;
-import net.minecraft.src.Item;
-import net.minecraft.src.ItemStack;
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.liquids.LiquidContainerRegistry;
 import net.minecraftforge.liquids.LiquidDictionary;
@@ -24,7 +24,7 @@ import forestry.api.recipes.ICarpenterManager;
 import forestry.api.recipes.ISqueezerManager;
 import forestry.api.recipes.RecipeManagers;
 
-@Mod(name="ColorWater", version="0.0.0", modid = "ColorWater")
+@Mod(name="ColorWater", version="@THIS_MOD_VERSION@", modid = "ColorWater")
 @NetworkMod(clientSideRequired=true, serverSideRequired=false)
 public class ColorWater {
 

@@ -3,11 +3,10 @@ package colorwater;
 import buildcraft.api.fuels.IronEngineFuel;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
-import net.minecraft.src.Block;
-import net.minecraft.src.CreativeTabs;
-import net.minecraft.src.Item;
-import net.minecraft.src.ItemStack;
-import net.minecraft.src.Material;
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 import net.minecraftforge.liquids.LiquidContainerData;
 import net.minecraftforge.liquids.LiquidContainerRegistry;
 import net.minecraftforge.liquids.LiquidDictionary;
@@ -41,7 +40,7 @@ public class ModItems
 				.setTextureFile(CommonProxy.BLOCKS_PNG);
 			
 			LanguageRegistry.addName(blockGel, "Generic Gel");
-			GameRegistry.registerBlock(blockGel, ItemBlockGeneric.class);
+			GameRegistry.registerBlock(blockGel, ItemBlockGeneric.class, "gel");
 		}
 		
 		(bucketGeneric = new ItemGeneric(ModConfiguration.idBucketGeneric))

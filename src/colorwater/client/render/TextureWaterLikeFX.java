@@ -1,7 +1,7 @@
 package colorwater.client.render;
 
-import net.minecraft.src.RenderEngine;
 import cpw.mods.fml.client.FMLTextureFX;
+import net.minecraft.client.renderer.RenderEngine;
 import net.minecraftforge.client.ForgeHooksClient;
 
 public class TextureWaterLikeFX extends FMLTextureFX

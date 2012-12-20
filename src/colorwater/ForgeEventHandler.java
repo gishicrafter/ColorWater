@@ -1,7 +1,7 @@
 package colorwater;
 
-import net.minecraft.src.EnumMovingObjectType;
-import net.minecraft.src.Item;
+import net.minecraft.item.Item;
+import net.minecraft.util.EnumMovingObjectType;
 import net.minecraftforge.event.Event.Result;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.player.FillBucketEvent;
