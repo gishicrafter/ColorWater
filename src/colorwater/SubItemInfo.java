@@ -18,7 +18,7 @@ public class SubItemInfo {
 	public SubItemInfo(ItemGeneric parent, int meta)
 	{
 		if(meta < 0) throw new IllegalArgumentException("Parameter 'meta' should be >= 0");
-		parentID = parent.shiftedIndex;
+		parentID = parent.itemID;
 		this.meta = meta;
 		
 		if(parent.subItemList.containsKey(meta)){

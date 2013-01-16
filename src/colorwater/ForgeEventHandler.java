@@ -11,7 +11,7 @@ public class ForgeEventHandler {
 	@ForgeSubscribe
 	public void handleFillBucketEvent(FillBucketEvent event)
 	{
-		if(Item.bucketEmpty.shiftedIndex == event.current.itemID){
+		if(Item.bucketEmpty.itemID == event.current.itemID){
 			if(event.target.typeOfHit == EnumMovingObjectType.TILE){
 				int blockID = event.world.getBlockId(event.target.blockX, event.target.blockY, event.target.blockZ);
 				int blockMeta = event.world.getBlockMetadata(event.target.blockX, event.target.blockY, event.target.blockZ);
