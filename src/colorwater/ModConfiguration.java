@@ -1,7 +1,7 @@
 package colorwater;
 
 import java.io.File;
-import gishicrafter.util.ConfigHelper;
+import colorwater.util.ConfigHelper;
 
 public class ModConfiguration
 {
