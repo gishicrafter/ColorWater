@@ -1,5 +1,5 @@
 <?xml version="1.0" ?> 
-<project name="ColorWater">
+<project name="ColorWater" default="release">
 	
 	<property file="build.properties" />
 	
@@ -18,8 +18,8 @@
 	
 	<target name="clean">
 		<delete>
-			<fileset dir="${dir.mcp}/src/minecraft" excludes="cpw/**, ibxm/**, net/**, paulscode/**, fml_at.cfg, fml_marker.cfg, fmlversion.properties, forge_at.cfg, forge_logo.png, mcp.png, mcpmod.info, Start.java" />
 			<dirset dir="${dir.mcp}/src/minecraft" excludes="cpw, ibxm, net, paulscode" />
+			<fileset dir="${dir.mcp}/src/minecraft" excludes="cpw/**, ibxm/**, net/**, paulscode/**, fml_at.cfg, fml_marker.cfg, fmlversion.properties, forge_at.cfg, forge_logo.png, mcp.png, mcpmod.info, Start.java" />
 		</delete>
 	</target>
 	
